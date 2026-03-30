@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="apple-mobile-web-app-title" content="Aerial Inspect">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a1a' width='100' height='100' rx='20'/><text x='50' y='62' text-anchor='middle' fill='white' font-size='22' font-weight='bold'>AERIAL</text></svg>">
+<title>Aerial Lift Inspection — Titan Overhead Door</title>
+<style>
+  :root {
+    --brand: #1a1a1a;
+    --brand-light: #333333;
+    --accent: #c22b2b;
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --border: #d1d5db;
+    --border-focus: #c22b2b;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --danger: #dc2626;
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --shadow: 0 2px 8px rgba(0,0,0,.08);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,.12);
+    --radius: 10px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    background: var(--brand);
+    color: #fff;
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo-area {
+    width: 140px; height: 60px;
+    border-radius: 8px;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .logo-area img {
+    width: 100%; height: 100%;
+    object-fit: contain; padding: 6px;
+  }
+  .header-text h1 {
+    font-size: 1.25rem; font-weight: 700;
+    letter-spacing: -.01em; line-height: 1.2;
+  }
+  .header-text p {
+    font-size: .75rem; opacity: .7; margin-top: 2px;
+  }
+
+  /* ---- CONTAINER ---- */
+  .container { max-width: 800px; margin: 0 auto; padding: 16px; }
+
+  /* ---- SECTION CARDS ---- */
+  .section {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--brand); color: #fff;
+    padding: 10px 16px; font-weight: 600;
+    font-size: .85rem; text-transform: uppercase;
+    letter-spacing: .06em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-header .icon { font-size: 1rem; }
+  .section-body { padding: 14px 16px; }
+
+  /* ---- FORM ELEMENTS ---- */
+  .form-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-bottom: 12px;
+  }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; }
+  .form-group label.field-label {
+    font-size: .72rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-muted); margin-bottom: 4px;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="date"],
+  .form-group input[type="time"],
+  .form-group input[type="tel"],
+  .form-group select,
+  .form-group textarea {
+    font-family: inherit; font-size: .9rem;
+    border: 1.5px solid var(--border);
+    border-radius: 7px; padding: 9px 11px;
+    color: var(--text); background: #fff;
+    width: 100%;
+  }
+  .form-group textarea { resize: vertical; min-height: 70px; }
+
+  /* ---- NATIVE CHECKBOX GRIDS ---- */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+  .check-grid.single-col {
+    grid-template-columns: 1fr;
+  }
+  .check-grid.triple-col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .check-grid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    font-size: .82rem;
+    cursor: pointer;
+    border-radius: 6px;
+    -webkit-tap-highlight-color: rgba(0,0,0,.05);
+  }
+  .check-grid label:active {
+    background: rgba(0,0,0,.03);
+  }
+  .check-grid input[type="checkbox"],
+  .check-grid input[type="radio"] {
+    width: 20px; height: 20px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+  }
+  .check-grid .ppe-icon {
+    font-size: 1.3rem;
+  }
+
+  /* ---- RISK RADIO BUTTONS ---- */
+  .risk-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .risk-group label {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 7px; font-weight: 600;
+    font-size: .85rem; cursor: pointer;
+    text-align: center;
+    -webkit-tap-highlight-color: rgba(0,0,0,.05);
+  }
+  .risk-group label:active {
+    transform: scale(.97);
+  }
+  .risk-group input:checked + label {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .risk-group input:checked + label::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: #fff; border-radius: 50%;
+    margin-right: 4px;
+  }
+
+  /* ---- PHOTO UPLOAD CARDS ---- */
+  .photo-upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .photo-upload-grid.single { grid-template-columns: 1fr; }
+  .photo-upload-item {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .photo-upload-item:hover {
+    border-color: var(--accent);
+    background: rgba(194, 43, 43, 0.02);
+  }
+  .photo-upload-item input[type="file"] {
+    display: none;
+  }
+  .photo-upload-item .label-text {
+    font-weight: 600; font-size: .85rem;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .photo-upload-item .label-subtext {
+    font-size: .7rem; color: var(--text-muted);
+  }
+  .photo-upload-item .upload-icon {
+    font-size: 1.8rem; margin-bottom: 8px;
+  }
+  .photo-upload-item.has-image {
+    position: relative;
+    border-style: solid;
+    border-color: var(--success);
+    background: rgba(22, 163, 74, 0.02);
+  }
+  .photo-upload-item.has-image .upload-icon {
+    display: none;
+  }
+  .photo-upload-item img {
+    width: 100%; height: auto;
+    max-height: 150px; object-fit: cover;
+    border-radius: 4px;
+  }
+  .photo-upload-item.has-image .label-text {
+    font-size: .75rem; color: var(--success);
+    position: absolute; bottom: 4px; right: 4px;
+  }
+  .photo-upload-item.has-image .label-subtext {
+    display: none;
+  }
+
+  /* ---- SIGNATURE PAD ---- */
+  .signature-area {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    background: #fff;
+    margin-bottom: 8px;
+  }
+  .signature-canvas {
+    display: block;
+    width: 100% !important;
+    height: 120px !important;
+    border-radius: 6px;
+    cursor: crosshair;
+    background: #f9fafb;
+  }
+  .signature-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .signature-buttons button {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: .8rem;
+    border: none; border-radius: 6px;
+    cursor: pointer; font-weight: 600;
+    transition: all .2s;
+  }
+  .signature-buttons .clear-sig {
+    background: #f1f5f9; color: var(--text);
+  }
+  .signature-buttons .clear-sig:active {
+    background: #e2e8f0;
+  }
+  .signature-buttons .confirm-sig {
+    background: var(--accent); color: #fff;
+  }
+  .signature-buttons .confirm-sig:active {
+    opacity: .9;
+  }
+
+  /* ---- NOTES FIELD ---- */
+  .notes-section textarea {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: .8rem;
+  }
+
+  /* ---- ACTION BUTTONS ---- */
+  .button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .button-group button {
+    flex: 1;
+    padding: 12px;
+    border: none; border-radius: 7px;
+    font-weight: 700; font-size: .9rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-transform: uppercase; letter-spacing: .02em;
+  }
+  .button-group .submit-btn {
+    background: var(--success); color: #fff;
+  }
+  .button-group .submit-btn:active {
+    opacity: .9;
+  }
+  .button-group .reset-btn {
+    background: #e5e7eb; color: var(--text);
+  }
+  .button-group .reset-btn:active {
+    background: #d1d5db;
+  }
+
+  /* ---- STICKY FOOTER ---- */
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--brand);
+    padding: 10px 20px;
+    box-shadow: 0 -2px 8px rgba(0,0,0,.1);
+    z-index: 50;
+  }
+  .sticky-footer .button-group {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 0;
+  }
+  .sticky-footer button {
+    background: var(--success);
+    color: #fff;
+  }
+  .sticky-footer button:active {
+    opacity: .9;
+  }
+
+  /* ---- MODAL / POPUP ---- */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal.active {
+    display: flex;
+  }
+  .modal-content {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal-header {
+    margin-bottom: 12px;
+  }
+  .modal-header h2 {
+    font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;
+  }
+  .modal-header p {
+    font-size: .85rem; color: var(--text-muted);
+  }
+  .modal-body {
+    margin-bottom: 16px; font-size: .9rem; line-height: 1.6;
+  }
+  .modal-footer {
+    display: flex; gap: 10px; justify-content: flex-end;
+  }
+  .modal-footer button {
+    padding: 8px 16px;
+    border: none; border-radius: 6px;
+    font-weight: 600; font-size: .85rem;
+    cursor: pointer; transition: all .2s;
+  }
+  .modal-footer .btn-cancel {
+    background: #f1f5f9; color: var(--text);
+  }
+  .modal-footer .btn-confirm {
+    background: var(--accent); color: #fff;
+  }
+
+  /* ---- TOAST NOTIFICATIONS ---- */
+  .toast {
+    position: fixed;
+    bottom: 20px; left: 20px;
+    background: #1e293b; color: #fff;
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: var(--shadow-lg);
+    z-index: 300;
+    animation: slideIn .3s ease-out;
+    font-size: .85rem;
+  }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+  .toast.warning { background: var(--warning); color: #000; }
+  @keyframes slideIn {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* ---- MOBILE OPTIMIZATIONS ---- */
+  @media (max-width: 600px) {
+    html { font-size: 14px; }
+    .header {
+      padding: 12px 14px;
+    }
+    .logo-area {
+      width: 110px; height: 50px;
+    }
+    .header-text h1 {
+      font-size: 1.05rem;
+    }
+    .form-row { grid-template-columns: 1fr; }
+    .check-grid { grid-template-columns: 1fr; }
+    .check-grid.triple-col { grid-template-columns: 1fr; }
+    .risk-group { grid-template-columns: 1fr; }
+    .photo-upload-grid { grid-template-columns: 1fr; }
+    .container { padding: 12px; }
+    .section { margin-bottom: 10px; }
+    .section-body { padding: 10px 12px; }
+    .signature-canvas { height: 100px !important; }
+    .button-group {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .button-group button {
+      padding: 14px;
+    }
+    body { padding-bottom: 120px; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 100'><rect fill='%231a1a1a' width='150' height='100' rx='8'/><text x='75' y='65' text-anchor='middle' fill='white' font-size='24' font-weight='bold' letter-spacing='2'>TITAN</text></svg>" alt="Titan Logo">
+    </div>
+    <div class="header-text">
+      <h1>Aerial Lift</h1>
+      <p>Inspection Checklist</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- FORM START -->
+  <form id="inspectionForm">
+
+    <!-- ---- GENERAL INFORMATION ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">📋</span>
+        <span>General Information</span>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">Inspection Date</label>
+            <input type="date" name="inspectionDate" required>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Inspector Name</label>
+            <input type="text" name="inspectorName" placeholder="Full name" required>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="field-label">Inspection Location</label>
+            <input type="text" name="location" placeholder="Site address" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- EQUIPMENT IDENTIFICATION ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🏷️</span>
+        <span>Equipment Identification</span>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">Equipment Type</label>
+            <select name="equipmentType" required>
+              <option value="">-- Select Type --</option>
+              <option value="scissor_lift">Scissor Lift</option>
+              <option value="boom_lift">Boom Lift</option>
+              <option value="vertical_lift">Vertical Lift</option>
+              <option value="personnel_lift">Personnel Lift</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Serial/ID Number</label>
+            <input type="text" name="serialNumber" placeholder="Manufacturer ID" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">Manufacturer</label>
+            <input type="text" name="manufacturer" placeholder="e.g., JLG, Genie, Snorkel" required>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Year/Model</label>
+            <input type="text" name="yearModel" placeholder="e.g., 2018 | Model XYZ" required>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="field-label">Hours of Operation (from meter)</label>
+            <input type="text" name="operatingHours" placeholder="e.g., 2350 hrs" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- STRUCTURAL INSPECTION ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🔍</span>
+        <span>Structural Inspection</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Check condition of key structural components:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="struct_frame"> Frame/Welds</label>
+          <label><input type="checkbox" name="struct_mast"> Mast Sections</label>
+          <label><input type="checkbox" name="struct_boom"> Boom Arm</label>
+          <label><input type="checkbox" name="struct_platform"> Platform/Basket</label>
+          <label><input type="checkbox" name="struct_cylinders"> Hydraulic Cylinders</label>
+          <label><input type="checkbox" name="struct_hoses"> Hoses & Lines</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Structural Damage / Notes</label>
+          <textarea name="structuralNotes" placeholder="Describe any cracks, bends, rust, or other damage..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- MECHANICAL SYSTEMS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">⚙️</span>
+        <span>Mechanical Systems</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Verify operation of key systems:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="mech_hydraulics"> Hydraulics</label>
+          <label><input type="checkbox" name="mech_brakes"> Brakes</label>
+          <label><input type="checkbox" name="mech_steering"> Steering (if mobile)</label>
+          <label><input type="checkbox" name="mech_boom_extend"> Boom Extension</label>
+          <label><input type="checkbox" name="mech_basket_tilt"> Basket Tilt/Rotation</label>
+          <label><input type="checkbox" name="mech_guardrails"> Guardrails/Gates</label>
+          <label><input type="checkbox" name="mech_controls"> Controls</label>
+          <label><input type="checkbox" name="mech_emergency"> Emergency Systems</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Mechanical Issues / Notes</label>
+          <textarea name="mechanicalNotes" placeholder="Describe any malfunctions or concerns..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- SAFETY DEVICES ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">⚠️</span>
+        <span>Safety Devices</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Confirm all safety equipment is present and functional:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="safety_guardrails"> Guard Rails</label>
+          <label><input type="checkbox" name="safety_gates"> Safety Gates/Doors</label>
+          <label><input type="checkbox" name="safety_nets"> Safety Nets</label>
+          <label><input type="checkbox" name="safety_harness_points"> Harness Points</label>
+          <label><input type="checkbox" name="safety_labels"> Warning Labels</label>
+          <label><input type="checkbox" name="safety_alarms"> Backup Alarms</label>
+          <label><input type="checkbox" name="safety_lights"> Lights/Beacons</label>
+          <label><input type="checkbox" name="safety_horn"> Horn/Buzzer</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Safety Device Issues / Notes</label>
+          <textarea name="safetyNotes" placeholder="List any missing or defective safety equipment..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- ELECTRICAL SYSTEMS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">⚡</span>
+        <span>Electrical Systems</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Check electrical components and battery (if applicable):
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="elec_battery"> Battery</label>
+          <label><input type="checkbox" name="elec_charging"> Charging System</label>
+          <label><input type="checkbox" name="elec_wiring"> Wiring/Connections</label>
+          <label><input type="checkbox" name="elec_motors"> Motors</label>
+          <label><input type="checkbox" name="elec_switches"> Control Switches</label>
+          <label><input type="checkbox" name="elec_panel"> Electrical Panel</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Electrical Issues / Notes</label>
+          <textarea name="electricalNotes" placeholder="Describe any electrical concerns, corrosion, or failures..."></textarea>
+        </div>
+      </div>
+    </div>
+col { grid-template-columns: 1fr 1fr 1fr; }
+    .sig-field-row { grid-template-columns: 1fr; }
+    .button-group { grid-template-columns: 1fr 1fr; }
+  }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script>
+
+/* ====== UTILITIES ====== */
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric'
+  });
+}
+
+/* ====== FORM STATE ====== */
+const formState = {
+  inspectionData: {},
+  uploadedPhotos: {},
+  signatureData: null,
+};
+
+/* ====== PHOTO UPLOAD HANDLING ====== */
+function initPhotoUploads() {
+  $$('.photo-upload-item').forEach((item) => {
+    const input = item.querySelector('input[type="file"]');
+    const photoKey = input.getAttribute('data-photo-key');
+    
+    item.addEventListener('click', () => input.click());
+    
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        formState.uploadedPhotos[photoKey] = evt.target.result;
+        item.classList.add('has-image');
+        
+        // Remove old image if exists
+        const oldImg = item.querySelector('img');
+        if (oldImg) oldImg.remove();
+        
+        // Add image
+        const img = document.createElement('img');
+        img.src = evt.target.result;
+        item.appendChild(img);
+        
+        // Add checkmark indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'label-text';
+        indicator.textContent = '';
+        item.appendChild(indicator);
+        
+        showToast('Photo uploaded', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
+
+/* ====== SIGNATURE PAD INITIALIZATION ====== */
+function initSignaturePad() {
+  const canvas = $('#signaturePad');
+  if (!canvas) return;
+  
+  const sigPad = new SignaturePad(canvas, {
+    minWidth: 0.5,
+    maxWidth: 3,
+    penColor: '#1a1a1a',
+  });
+  
+  $('#clearSig').addEventListener('click', () => {
+    sigPad.clear();
+  });
+  
+  $('#confirmSig').addEventListener('click', () => {
+    if (sigPad.isEmpty()) {
+      showToast('Please draw a signature', 'warning');
+      return;
+    }
+    formState.signatureData = sigPad.toDataURL();
+    showToast('Signature captured', 'success');
+  });
+}
+
+/* ====== FORM SUBMISSION ====== */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = $('#inspectionForm');
+  if (!form) return;
+  
+  initPhotoUploads();
+  initSignaturePad();
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Gather form data
+    const formData = new FormData(form);
+    formState.inspectionData = Object.fromEntries(formData);
+    
+    // Validate critical fields
+    if (!formState.inspectionData.inspectionDate) {
+      showToast('Please select inspection date', 'error');
+      return;
+    }
+    if (!formState.inspectionData.inspectorName) {
+      showToast('Please enter inspector name', 'error');
+      return;
+    }
+    if (!formState.signatureData) {
+      showToast('Please capture signature', 'error');
+      return;
+    }
+    
+    // Compile full report
+    const report = {
+      inspectionDate: formState.inspectionData.inspectionDate,
+      inspectorName: formState.inspectionData.inspectorName,
+      location: formState.inspectionData.location,
+      equipmentType: formState.inspectionData.equipmentType,
+      serialNumber: formState.inspectionData.serialNumber,
+      manufacturer: formState.inspectionData.manufacturer,
+      yearModel: formState.inspectionData.yearModel,
+      operatingHours: formState.inspectionData.operatingHours,
+      structuralNotes: formState.inspectionData.structuralNotes,
+      mechanicalNotes: formState.inspectionData.mechanicalNotes,
+      safetyNotes: formState.inspectionData.safetyNotes,
+      electricalNotes: formState.inspectionData.electricalNotes,
+      hydraulicNotes: formState.inspectionData.hydraulicNotes,
+      tireWheelNotes: formState.inspectionData.tireWheelNotes,
+      weatherNotes: formState.inspectionData.weatherNotes,
+      additionalNotes: formState.inspectionData.additionalNotes,
+      riskLevel: formState.inspectionData.riskLevel,
+      status: formState.inspectionData.status,
+      signature: formState.signatureData,
+      photos: formState.uploadedPhotos,
+      timestamp: new Date().toISOString(),
+    };
+    
+    // Log to browser console
+    console.log('Inspection Report Submitted:', report);
+    
+    // Send to server (if configured)
+    // fetch('/api/inspection', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(report)
+    // }).then(r => r.json()).then(data => {
+    //   showToast('Report submitted successfully', 'success');
+    //   form.reset();
+    //   sigPad.clear();
+    //   $$('.photo-upload-item').forEach(i => i.classList.remove('has-image'));
+    // }).catch(err => {
+    //   showToast('Error submitting report: ' + err.message, 'error');
+    // });
+    
+    // Local demo: Show success
+    showToast('Inspection report compiled (logged to console)', 'success');
+    setTimeout(() => {
+      alert(`Inspection Report for ${report.serialNumber} (${report.equipmentType}) submitted.\n\nOpen DevTools Console (F12) to see full report.`);
+    }, 500);
+  });
+});
+
+</script>
+</body>
+</html>
+col { grid-template-columns: 1fr 1fr 1fr; }
+    .sig-field-row { grid-template-columns: 1fr; }
+    .risk-group { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  /* ==== PRINT / PDF ==== */
+  @media print {
+    .sticky-footer { position: static; }
+    body { padding-bottom: 0; }
+    .header { position: static; }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script>
+
+/* ====== UTILITIES ====== */
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric'
+  });
+}
+
+/* ====== FORM STATE ====== */
+const formState = {
+  inspectionData: {},
+  uploadedPhotos: {},
+  signatureData: null,
+};
+
+/* ====== PHOTO UPLOAD HANDLING ====== */
+function initPhotoUploads() {
+  $$('.photo-upload-item').forEach((item) => {
+    const input = item.querySelector('input[type="file"]');
+    const photoKey = input.getAttribute('data-photo-key');
+    
+    item.addEventListener('click', () => input.click());
+    
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        formState.uploadedPhotos[photoKey] = evt.target.result;
+        item.classList.add('has-image');
+        
+        // Remove old image if exists
+        const oldImg = item.querySelector('img');
+        if (oldImg) oldImg.remove();
+        
+        // Add image
+        const img = document.createElement('img');
+        img.src = evt.target.result;
+        item.appendChild(img);
+        
+        // Add checkmark indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'label-text';
+        indicator.textContent = '';
+        item.appendChild(indicator);
+        
+        showToast('Photo uploaded', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
+
+/* ====== SIGNATURE PAD INITIALIZATION ====== */
+function initSignaturePad() {
+  const canvas = $('#signaturePad');
+  if (!canvas) return;
+  
+  const sigPad = new SignaturePad(canvas, {
+    minWidth: 0.5,
+    maxWidth: 3,
+    penColor: '#1a1a1a',
+  });
+  
+  $('#clearSig').addEventListener('click', () => {
+    sigPad.clear();
+  });
+  
+  $('#confirmSig').addEventListener('click', () => {
+    if (sigPad.isEmpty()) {
+      showToast('Please draw a signature', 'warning');
+      return;
+    }
+    formState.signatureData = sigPad.toDataURL();
+    showToast('Signature captured', 'success');
+  });
+}
+
+/* ====== FORM SUBMISSION ====== */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = $('#inspectionForm');
+  if (!form) return;
+  
+  initPhotoUploads();
+  initSignaturePad();
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Gather form data
+    const formData = new FormData(form);
+    formState.inspectionData = Object.fromEntries(formData);
+    
+    // Validate critical fields
+    if (!formState.inspectionData.inspectionDate) {
+      showToast('Please select inspection date', 'error');
+      return;
+    }
+    if (!formState.inspectionData.inspectorName) {
+      showToast('Please enter inspector name', 'error');
+      return;
+    }
+    if (!formState.signatureData) {
+      showToast('Please capture signature', 'error');
+      return;
+    }
+    
+    // Compile full report
+    const report = {
+      inspectionDate: formState.inspectionData.inspectionDate,
+      inspectorName: formState.inspectionData.inspectorName,
+      location: formState.inspectionData.location,
+      equipmentType: formState.inspectionData.equipmentType,
+      serialNumber: formState.inspectionData.serialNumber,
+      manufacturer: formState.inspectionData.manufacturer,
+      yearModel: formState.inspectionData.yearModel,
+      operatingHours: formState.inspectionData.operatingHours,
+      structuralNotes: formState.inspectionData.structuralNotes,
+      mechanicalNotes: formState.inspectionData.mechanicalNotes,
+      safetyNotes: formState.inspectionData.safetyNotes,
+      electricalNotes: formState.inspectionData.electricalNotes,
+      hydraulicNotes: formState.inspectionData.hydraulicNotes,
+      tireWheelNotes: formState.inspectionData.tireWheelNotes,
+      weatherNotes: formState.inspectionData.weatherNotes,
+      additionalNotes: formState.inspectionData.additionalNotes,
+      riskLevel: formState.inspectionData.riskLevel,
+      status: formState.inspectionData.status,
+      signature: formState.signatureData,
+      photos: formState.uploadedPhotos,
+      timestamp: new Date().toISOString(),
+    };
+    
+    // Log to browser console
+    console.log('Inspection Report Submitted:', report);
+    
+    // Send to server (if configured)
+    // fetch('/api/inspection', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(report)
+    // }).then(r => r.json()).then(data => {
+    //   showToast('Report submitted successfully', 'success');
+    //   form.reset();
+    //   sigPad.clear();
+    //   $$('.photo-upload-item').forEach(i => i.classList.remove('has-image'));
+    // }).catch(err => {
+    //   showToast('Error submitting report: ' + err.message, 'error');
+    // });
+    
+    // Local demo: Show success
+    showToast('Inspection report compiled (logged to console)', 'success');
+    setTimeout(() => {
+      alert(`Inspection Report for ${report.serialNumber} (${report.equipmentType}) submitted.\n\nOpen DevTools Console (F12) to see full report.`);
+    }, 500);
+  });
+});
+
+</script>
+</body>
+</html>
+      </section>
+    </div>
+
+    <!-- ---- HYDRAULIC SYSTEMS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">💧</span>
+        <span>Hydraulic Systems</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Check hydraulic oil condition and system integrity:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="hydro_oil_level"> Oil Level/Top Up</label>
+          <label><input type="checkbox" name="hydro_oil_color"> Oil Color (clean)</label>
+          <label><input type="checkbox" name="hydro_leaks"> No Visible Leaks</label>
+          <label><input type="checkbox" name="hydro_filters"> Filters</label>
+          <label><input type="checkbox" name="hydro_hoses"> Hoses (crimp/crack)</label>
+          <label><input type="checkbox" name="hydro_pressure"> Pressure Gauge</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Hydraulic Issues / Notes</label>
+          <textarea name="hydraulicNotes" placeholder="Describe any leaks, discoloration, or pressure issues..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- TIRES & WHEELS (if mobile) ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🛞</span>
+        <span>Tires & Wheels (if applicable)</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          For mobile lifts, inspect tires and wheel condition:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="tire_tread"> Tire Tread</label>
+          <label><input type="checkbox" name="tire_damage"> No Damage/Bulges</label>
+          <label><input type="checkbox" name="tire_pressure"> Tire Pressure</label>
+          <label><input type="checkbox" name="wheel_bolts"> Wheel Bolts/Lugs</label>
+          <label><input type="checkbox" name="wheel_bearings"> Bearings</label>
+          <label><input type="checkbox" name="tire_alignment"> Alignment</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Tire & Wheel Issues / Notes</label>
+          <textarea name="tireWheelNotes" placeholder="Note any tire wear, flat spots, cracking, or alignment concerns..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- WEATHER & ENVIRONMENTAL ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🌤️</span>
+        <span>Weather & Environmental</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Note current conditions and environmental factors:
+        </p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">Weather Conditions</label>
+            <select name="weather" required>
+              <option value="">-- Select --</option>
+              <option value="clear">Clear</option>
+              <option value="cloudy">Cloudy</option>
+              <option value="rain">Rain</option>
+              <option value="snow">Snow</option>
+              <option value="wind">Windy</option>
+              <option value="fog">Fog</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Temperature</label>
+            <input type="text" name="temperature" placeholder="e.g., 72°F" required>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="field-label">Environmental Notes</label>
+            <textarea name="weatherNotes" placeholder="Road conditions, surfaces, obstacles, hazards..."></textarea>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- PHOTOS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">📸</span>
+        <span>Photo Documentation</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Upload photos of any damage, issues, or general condition:
+        </p>
+        <div class="photo-upload-grid">
+          <div class="photo-upload-item" data-photo-type="overall">
+            <input type="file" accept="image/*" data-photo-key="overall_condition">
+            <div class="upload-icon">📷</div>
+            <div class="label-text">Overall Condition</div>
+            <div class="label-subtext">Tap to upload</div>
+          </div>
+          <div class="photo-upload-item" data-photo-type="damage">
+            <input type="file" accept="image/*" data-photo-key="damage_photo">
+            <div class="upload-icon">🔴</div>
+            <div class="label-text">Damage / Issue</div>
+            <div class="label-subtext">Tap to upload</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- SIGNATURE ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">✍️</span>
+        <span>Inspector Signature</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 8px;">
+          Draw your signature below to complete the inspection:
+        </p>
+        <div class="signature-area">
+          <canvas id="signaturePad"></canvas>
+        </div>
+        <div class="signature-buttons">
+          <button type="button" class="clear-sig" id="clearSig">Clear</button>
+          <button type="button" class="confirm-sig" id="confirmSig">Confirm Signature</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- INSPECTION RISK ASSESSMENT ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🚨</span>
+        <span>Risk Assessment</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Based on your findings, classify the inspection result:
+        </p>
+        <div class="risk-group">
+          <label>
+            <input type="radio" name="riskLevel" value="pass" required>
+            PASS
+          </label>
+          <label>
+            <input type="radio" name="riskLevel" value="fail" required>
+            FAIL
+          </label>
+          <label>
+            <input type="radio" name="riskLevel" value="conditional" required>
+            CONDITIONAL
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- INSPECTION STATUS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">✅</span>
+        <span>Inspection Status</span>
+      </div>
+      <div class="section-body">
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="field-label">Status</label>
+            <select name="status" required>
+              <option value="">-- Select Status --</option>
+              <option value="in_service">In Service - Safe to Operate</option>
+              <option value="limited_service">Limited Service - Restrictions Apply</option>
+              <option value="out_of_service">Out of Service - Do Not Use</option>
+              <option value="requires_repair">Requires Repair Before Use</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- ADDITIONAL NOTES ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">📝</span>
+        <span>Additional Notes & Comments</span>
+      </div>
+      <div class="section-body">
+        <div class="form-group">
+          <label class="field-label">Inspector Comments</label>
+          <textarea name="additionalNotes" placeholder="Any additional observations, recommendations, or follow-up actions required..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- SUBMIT BUTTON ---- -->
+    <div style="height: 30px;"></div>
+
+  </form>
+
+</div>
+
+<!-- STICKY FOOTER -->
+<div class="sticky-footer">
+  <div class="button-group" style="margin-bottom: 0;">
+    <button type="submit" form="inspectionForm" class="submit-btn">Submit Inspection</button>
+  </div>
+          </div>col { grid-template-columns: 1fr 1fr 1fr; }
+    .sig-field-row { grid-template-columns: 1fr; }
+    .risk-group { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  /* ==== PRINT / PDF ==== */
+  @media print {
+    @page { size: A4; margin: 10mm 12mm; }
+    .export-bar, .add-btn-row, .remove-btn { display: none !important; }
+    html { font-size: 11px; }
+    body {
+      background: #fff !important;
+      color: #000;
+      padding-bottom: 0;
+    }
+    .header, .sticky-footer { display: none; }
+    .container { max-width: 100%; padding: 0; }
+    .section { page-break-inside: avoid; margin-bottom: 10px; }
+    canvas { max-width: 100%; }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script>
+
+/* ====== UTILITIES ====== */
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric'
+  });
+}
+
+/* ====== FORM STATE ====== */
+const formState = {
+  inspectionData: {},
+  uploadedPhotos: {},
+  signatureData: null,
+};
+
+/* ====== PHOTO UPLOAD HANDLING ====== */
+function initPhotoUploads() {
+  $$('.photo-upload-item').forEach((item) => {
+    const input = item.querySelector('input[type="file"]');
+    const photoKey = input.getAttribute('data-photo-key');
+    
+    item.addEventListener('click', () => input.click());
+    
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        formState.uploadedPhotos[photoKey] = evt.target.result;
+        item.classList.add('has-image');
+        
+        // Remove old image if exists
+        const oldImg = item.querySelector('img');
+        if (oldImg) oldImg.remove();
+        
+        // Add image
+        const img = document.createElement('img');
+        img.src = evt.target.result;
+        item.appendChild(img);
+        
+        // Add checkmark indicator
+        const indicator = document.createElement('div');
+        indicator.className = 'label-text';
+        indicator.textContent = '✓';
+        item.appendChild(indicator);
+        
+        showToast('Photo uploaded', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
+
+/* ====== SIGNATURE PAD INITIALIZATION ====== */
+function initSignaturePad() {
+  const canvas = $('#signaturePad');
+  if (!canvas) return;
+  
+  const sigPad = new SignaturePad(canvas, {
+    minWidth: 0.5,
+    maxWidth: 3,
+    penColor: '#1a1a1a',
+  });
+  
+  $('#clearSig').addEventListener('click', () => {
+    sigPad.clear();
+  });
+  
+  $('#confirmSig').addEventListener('click', () => {
+    if (sigPad.isEmpty()) {
+      showToast('Please draw a signature', 'warning');
+      return;
+    }
+    formState.signatureData = sigPad.toDataURL();
+    showToast('Signature captured', 'success');
+  });
+}
+
+/* ====== FORM SUBMISSION ====== */
+document.addEventListener('DOMContentLoaded', () => {
+  const form = $('#inspectionForm');
+  if (!form) return;
+  
+  initPhotoUploads();
+  initSignaturePad();
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Gather form data
+    const formData = new FormData(form);
+    formState.inspectionData = Object.fromEntries(formData);
+    
+    // Validate critical fields
+    if (!formState.inspectionData.inspectionDate) {
+      showToast('Please select inspection date', 'error');
+      return;
+    }
+    if (!formState.inspectionData.inspectorName) {
+      showToast('Please enter inspector name', 'error');
+      return;
+    }
+    if (!formState.signatureData) {
+      showToast('Please capture signature', 'error');
+      return;
+    }
+    
+    // Compile full report
+    const report = {
+      inspectionDate: formState.inspectionData.inspectionDate,
+      inspectorName: formState.inspectionData.inspectorName,
+      location: formState.inspectionData.location,
+      equipmentType: formState.inspectionData.equipmentType,
+      serialNumber: formState.inspectionData.serialNumber,
+      manufacturer: formState.inspectionData.manufacturer,
+      yearModel: formState.inspectionData.yearModel,
+      operatingHours: formState.inspectionData.operatingHours,
+      structuralNotes: formState.inspectionData.structuralNotes,
+      mechanicalNotes: formState.inspectionData.mechanicalNotes,
+      safetyNotes: formState.inspectionData.safetyNotes,
+      electricalNotes: formState.inspectionData.electricalNotes,
+      hydraulicNotes: formState.inspectionData.hydraulicNotes,
+      tireWheelNotes: formState.inspectionData.tireWheelNotes,
+      weatherNotes: formState.inspectionData.weatherNotes,
+      additionalNotes: formState.inspectionData.additionalNotes,
+      riskLevel: formState.inspectionData.riskLevel,
+      status: formState.inspectionData.status,
+      signature: formState.signatureData,
+      photos: formState.uploadedPhotos,
+      timestamp: new Date().toISOString(),
+    };
+    
+    // Log to browser console
+    console.log('Inspection Report Submitted:', report);
+    
+    // Send to server (if configured)
+    // fetch('/api/inspection', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(report)
+    // }).then(r => r.json()).then(data => {
+    //   showToast('Report submitted successfully', 'success');
+    //   form.reset();
+    //   sigPad.clear();
+    //   $$('.photo-upload-item').forEach(i => i.classList.remove('has-image'));
+    // }).catch(err => {
+    //   showToast('Error submitting report: ' + err.message, 'error');
+    // });
+    
+    // Local demo: Show success
+    showToast('Inspection report compiled (logged to console)', 'success');
+    setTimeout(() => {
+      alert(`Inspection Report for ${report.serialNumber} (${report.equipmentType}) submitted.\n\nOpen DevTools Console (F12) to see full report.`);
+    }, 500);
+  });
+});
+
+</script>
+</body>
+</html>
+      </section>
+    </div>
+
+    <!-- ---- HYDRAULIC SYSTEMS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">💧</span>
+        <span>Hydraulic Systems</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Check hydraulic oil condition and system integrity:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="hydro_oil_level"> Oil Level/Top Up</label>
+          <label><input type="checkbox" name="hydro_oil_color"> Oil Color (clean)</label>
+          <label><input type="checkbox" name="hydro_leaks"> No Visible Leaks</label>
+          <label><input type="checkbox" name="hydro_filters"> Filters</label>
+          <label><input type="checkbox" name="hydro_hoses"> Hoses (crimp/crack)</label>
+          <label><input type="checkbox" name="hydro_pressure"> Pressure Gauge</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Hydraulic Issues / Notes</label>
+          <textarea name="hydraulicNotes" placeholder="Describe any leaks, discoloration, or pressure issues..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- TIRES & WHEELS (if mobile) ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🛞</span>
+        <span>Tires & Wheels (if applicable)</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          For mobile lifts, inspect tires and wheel condition:
+        </p>
+        <div class="check-grid">
+          <label><input type="checkbox" name="tire_tread"> Tire Tread</label>
+          <label><input type="checkbox" name="tire_damage"> No Damage/Bulges</label>
+          <label><input type="checkbox" name="tire_pressure"> Tire Pressure</label>
+          <label><input type="checkbox" name="wheel_bolts"> Wheel Bolts/Lugs</label>
+          <label><input type="checkbox" name="wheel_bearings"> Bearings</label>
+          <label><input type="checkbox" name="tire_alignment"> Alignment</label>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label class="field-label">Tire & Wheel Issues / Notes</label>
+          <textarea name="tireWheelNotes" placeholder="Note any tire wear, flat spots, cracking, or alignment concerns..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- WEATHER & ENVIRONMENTAL ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🌤️</span>
+        <span>Weather & Environmental</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Note current conditions and environmental factors:
+        </p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="field-label">Weather Conditions</label>
+            <select name="weather" required>
+              <option value="">-- Select --</option>
+              <option value="clear">Clear</option>
+              <option value="cloudy">Cloudy</option>
+              <option value="rain">Rain</option>
+              <option value="snow">Snow</option>
+              <option value="wind">Windy</option>
+              <option value="fog">Fog</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Temperature</label>
+            <input type="text" name="temperature" placeholder="e.g., 72°F" required>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="field-label">Environmental Notes</label>
+            <textarea name="weatherNotes" placeholder="Road conditions, surfaces, obstacles, hazards..."></textarea>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- PHOTOS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">📸</span>
+        <span>Photo Documentation</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Upload photos of any damage, issues, or general condition:
+        </p>
+        <div class="photo-upload-grid">
+          <div class="photo-upload-item" data-photo-type="overall">
+            <input type="file" accept="image/*" data-photo-key="overall_condition">
+            <div class="upload-icon">📷</div>
+            <div class="label-text">Overall Condition</div>
+            <div class="label-subtext">Tap to upload</div>
+          </div>
+          <div class="photo-upload-item" data-photo-type="damage">
+            <input type="file" accept="image/*" data-photo-key="damage_photo">
+            <div class="upload-icon">🔴</div>
+            <div class="label-text">Damage / Issue</div>
+            <div class="label-subtext">Tap to upload</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- SIGNATURE ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">✍️</span>
+        <span>Inspector Signature</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 8px;">
+          Draw your signature below to complete the inspection:
+        </p>
+        <div class="signature-area">
+          <canvas id="signaturePad"></canvas>
+        </div>
+        <div class="signature-buttons">
+          <button type="button" class="clear-sig" id="clearSig">Clear</button>
+          <button type="button" class="confirm-sig" id="confirmSig">Confirm Signature</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- INSPECTION RISK ASSESSMENT ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">🚨</span>
+        <span>Risk Assessment</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size: .85rem; color: var(--text-muted); margin-bottom: 10px;">
+          Based on your findings, classify the inspection result:
+        </p>
+        <div class="risk-group">
+          <label>
+            <input type="radio" name="riskLevel" value="pass" required>
+            PASS
+          </label>
+          <label>
+            <input type="radio" name="riskLevel" value="fail" required>
+            FAIL
+          </label>
+          <label>
+            <input type="radio" name="riskLevel" value="conditional" required>
+            CONDITIONAL
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- INSPECTION STATUS ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">✅</span>
+        <span>Inspection Status</span>
+      </div>
+      <div class="section-body">
+        <div class="form-row single">
+          <div class="form-group">
+            <label class="field-label">Status</label>
+            <select name="status" required>
+              <option value="">-- Select Status --</option>
+              <option value="in_service">In Service - Safe to Operate</option>
+              <option value="limited_service">Limited Service - Restrictions Apply</option>
+              <option value="out_of_service">Out of Service - Do Not Use</option>
+              <option value="requires_repair">Requires Repair Before Use</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- ADDITIONAL NOTES ---- -->
+    <div class="section">
+      <div class="section-header">
+        <span class="icon">📝</span>
+        <span>Additional Notes & Comments</span>
+      </div>
+      <div class="section-body">
+        <div class="form-group">
+          <label class="field-label">Inspector Comments</label>
+          <textarea name="additionalNotes" placeholder="Any additional observations, recommendations, or follow-up actions required..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- SUBMIT BUTTON ---- -->
+    <div style="height: 30px;"></div>
+
+  </form>
+
+</div>
+
+<!-- STICKY FOOTER -->
+<div class="sticky-footer">
+  <div class="button-group" style="margin-bottom: 0;">
+    <button type="submit" form="inspectionForm" class="submit-btn">Submit Inspection</button>
+  </div>
+  </div>
