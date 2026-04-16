@@ -122,7 +122,10 @@
     color: var(--text); background: #fff;
     width: 100%;
   }
-  .form-group textarea { resize: vertical; min-height: 70px; }
+  .form-group textarea {
+    resize: none; min-height: 70px;
+    overflow: hidden; /* auto-grow: JS adjusts height */
+  }
 
   /* ---- NATIVE CHECKBOX GRIDS ---- */
   .check-grid {
@@ -219,10 +222,15 @@
     padding: 4px; border-bottom: 1px solid #eee;
     vertical-align: top;
   }
-  .task-table td input {
+  .task-table td input,
+  .task-table td textarea {
     width: 100%; border: 1px solid #e5e7eb;
     border-radius: 5px; padding: 7px 8px;
     font-size: .82rem; font-family: inherit;
+  }
+  .task-table td textarea {
+    resize: none; overflow: hidden;
+    min-height: 34px; line-height: 1.4;
   }
   .task-table .step-num {
     font-weight: 700; color: var(--brand);
@@ -378,6 +386,21 @@
       box-shadow: none !important;
       border: 1px solid #ccc !important;
       margin-bottom: 8px !important;
+      break-inside: auto;           /* allow large sections to span pages */
+      page-break-inside: auto;
+    }
+    /* Keep section header glued to its body — never orphan a header alone */
+    .section-header {
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+    /* Small sections that fit on one page should stay together */
+    .section-body {
+      break-before: avoid;
+      page-break-before: avoid;
+    }
+    /* Each form-row and check-grid row should not split */
+    .form-row, .check-grid label, .task-table tr {
       break-inside: avoid;
       page-break-inside: avoid;
     }
@@ -389,12 +412,21 @@
     .form-group input,
     .form-group textarea,
     .sig-input,
-    .task-table td input {
+    .task-table td input,
+    .task-table td textarea {
       border: none !important;
       border-bottom: 1px solid #999 !important;
       border-radius: 0 !important;
       padding: 3px 2px !important;
       background: transparent !important;
+    }
+    /* Textareas must show ALL content when printing — no scrollbars, full height */
+    .form-group textarea,
+    .task-table td textarea {
+      overflow: visible !important;
+      height: auto !important;
+      min-height: 0 !important;
+      resize: none !important;
     }
     .task-table th {
       background: var(--brand) !important;
@@ -514,7 +546,7 @@
       <div class="form-row single">
         <div class="form-group">
           <label class="field-label">Task / Activity Description</label>
-          <textarea placeholder="Describe the work to be performed today..." rows="3"></textarea>
+          <textarea placeholder="Describe the work to be performed today..." rows="3" oninput="autoGrow(this)"></textarea>
         </div>
       </div>
       <label class="field-label" style="display:block;margin-bottom:6px;">Task Steps, Hazards & Controls</label>
@@ -529,18 +561,18 @@
             </tr>
           </thead>
           <tbody id="taskBody">
-            <tr><td class="step-num">1</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">2</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">3</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">4</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">5</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">6</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">7</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">8</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">9</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">10</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">11</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
-            <tr><td class="step-num">12</td><td><input type="text" placeholder="Describe step..."></td><td><input type="text" placeholder="What could go wrong?"></td><td><input type="text" placeholder="How to mitigate?"></td></tr>
+            <tr><td class="step-num">1</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">2</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">3</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">4</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">5</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">6</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">7</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">8</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">9</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">10</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">11</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
+            <tr><td class="step-num">12</td><td><textarea rows="1" placeholder="Describe step..." oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="What could go wrong?" oninput="autoGrow(this)"></textarea></td><td><textarea rows="1" placeholder="How to mitigate?" oninput="autoGrow(this)"></textarea></td></tr>
           </tbody>
         </table>
       </div>
@@ -677,7 +709,7 @@
     <div class="section-body">
       <div class="form-row single">
         <div class="form-group">
-          <textarea placeholder="Any additional safety concerns, instructions, toolbox talk topics, or notes..." rows="3"></textarea>
+          <textarea placeholder="Any additional safety concerns, instructions, toolbox talk topics, or notes..." rows="3" oninput="autoGrow(this)"></textarea>
         </div>
       </div>
     </div>
@@ -735,6 +767,18 @@
 </div>
 
 <script>
+// ---- AUTO-GROW TEXTAREAS ----
+function autoGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+// Initialize all textareas on load
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('textarea').forEach(function(ta) {
+    autoGrow(ta);
+  });
+});
+
 // ---- AUTO-FILL DATE/TIME ----
 (function() {
   var now = new Date();
@@ -749,13 +793,18 @@ document.getElementById('exportBtn').addEventListener('click', function() {
   document.getElementById('timestampLine').textContent =
     'Generated: ' + now.toLocaleString() + ' | Pre-Task Plan (PTP) — Titan Overhead Door';
 
+  // Ensure all textareas show full content before printing
+  document.querySelectorAll('textarea').forEach(function(ta) {
+    autoGrow(ta);
+  });
+
   // Hide empty task step rows for print
   var rows = document.getElementById('taskBody').rows;
   for (var i = 0; i < rows.length; i++) {
-    var inputs = rows[i].querySelectorAll('input');
+    var fields = rows[i].querySelectorAll('input, textarea');
     var hasContent = false;
-    for (var j = 0; j < inputs.length; j++) {
-      if (inputs[j].value.trim() !== '') { hasContent = true; break; }
+    for (var j = 0; j < fields.length; j++) {
+      if (fields[j].value.trim() !== '') { hasContent = true; break; }
     }
     if (!hasContent) { rows[i].classList.add('print-hide'); }
   }
