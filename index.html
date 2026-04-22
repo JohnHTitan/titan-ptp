@@ -127,7 +127,10 @@
     overflow: hidden; /* auto-grow: JS adjusts height */
   }
 
-  /* ---- NATIVE CHECKBOX GRIDS ---- */
+  /* Print-swap divs should never show on screen */
+  .print-text-div { display: none; }
+
+    /* ---- NATIVE CHECKBOX GRIDS ---- */
   .check-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -420,13 +423,29 @@
       padding: 3px 2px !important;
       background: transparent !important;
     }
-    /* Textareas must show ALL content when printing — no scrollbars, full height */
+    /* Hide textareas in print (replaced by .print-text-div) */
     .form-group textarea,
     .task-table td textarea {
+      display: none !important;
+    }
+    /* Print-swap divs: render ALL content naturally with no clipping */
+    .print-text-div {
+      display: block !important;
       overflow: visible !important;
       height: auto !important;
+      max-height: none !important;
       min-height: 0 !important;
-      resize: none !important;
+      white-space: pre-wrap !important;
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      border: none !important;
+      border-bottom: 1px solid #999 !important;
+      padding: 3px 2px !important;
+      background: transparent !important;
+    }
+    /* Remove the overflow-x scroll wrapper around the task table */
+    div[style*="overflow-x"] {
+      overflow: visible !important;
     }
     .task-table th {
       background: var(--brand) !important;
@@ -793,9 +812,29 @@ document.getElementById('exportBtn').addEventListener('click', function() {
   document.getElementById('timestampLine').textContent =
     'Generated: ' + now.toLocaleString() + ' | Pre-Task Plan (PTP) — Titan Overhead Door';
 
-  // Ensure all textareas show full content before printing
+  // Replace textareas with divs for print — textareas can clip/scroll in PDF.
+  // Divs naturally expand to fit all content with no scrollbars.
+  var printSwaps = [];
   document.querySelectorAll('textarea').forEach(function(ta) {
-    autoGrow(ta);
+    var div = document.createElement('div');
+    div.className = 'print-text-div';
+    div.textContent = ta.value;
+    // Copy computed styles that affect sizing
+    var cs = window.getComputedStyle(ta);
+    div.style.fontFamily = cs.fontFamily;
+    div.style.fontSize = cs.fontSize;
+    div.style.lineHeight = cs.lineHeight;
+    div.style.padding = cs.padding;
+    div.style.width = '100%';
+    div.style.boxSizing = 'border-box';
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.wordWrap = 'break-word';
+    div.style.overflowWrap = 'break-word';
+    div.style.minHeight = ta.value ? '0' : '1.2em';
+    div.style.borderBottom = '1px solid #999';
+    ta.style.display = 'none';
+    ta.parentNode.insertBefore(div, ta.nextSibling);
+    printSwaps.push({ textarea: ta, div: div });
   });
 
   // Hide empty task step rows for print
@@ -822,8 +861,15 @@ document.getElementById('exportBtn').addEventListener('click', function() {
 
   setTimeout(function() {
     window.print();
-    // Restore hidden rows after print dialog
+    // Restore: remove print divs, show textareas, clean up
     setTimeout(function() {
+      // Restore textareas from div swaps
+      printSwaps.forEach(function(swap) {
+        swap.textarea.style.display = '';
+        if (swap.div.parentNode) swap.div.parentNode.removeChild(swap.div);
+        autoGrow(swap.textarea);
+      });
+      // Restore hidden rows
       var hidden = document.querySelectorAll('.print-hide');
       for (var k = 0; k < hidden.length; k++) {
         hidden[k].classList.remove('print-hide');
