@@ -121,7 +121,8 @@
     color: var(--text); background: #fff;
     width: 100%;
   }
-  .form-group textarea { resize: vertical; min-height: 70px; }
+  .form-group textarea { resize: none; min-height: 70px; overflow: hidden; }
+  .print-text-div { display: none; }
 
   /* ---- NATIVE CHECKBOX GRIDS ---- */
   .check-grid {
@@ -386,12 +387,24 @@
       -webkit-print-color-adjust: exact !important;
     }
     .form-group input,
-    .form-group textarea,
     .sig-input,
     .task-table td input {
       border: none !important;
       border-bottom: 1px solid #999 !important;
       border-radius: 0 !important;
+      padding: 3px 2px !important;
+      background: transparent !important;
+    }
+    .form-group textarea { display: none !important; }
+    .print-text-div {
+      display: block !important;
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      white-space: pre-wrap !important;
+      word-wrap: break-word !important;
+      border: none !important;
+      border-bottom: 1px solid #999 !important;
       padding: 3px 2px !important;
       background: transparent !important;
     }
@@ -439,7 +452,7 @@
       </div>
       <div class="form-row">
         <div class="form-group"><label class="field-label">Operator Name</label><input type="text" placeholder="Full name"></div>
-        <div class="form-group"><label class="field-label">Certification / License #</label><input type="text" placeholder="License or cert number"></div>
+        <div class="form-group"><label class="field-label">Job Site</label><input type="text" placeholder="Site name"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="field-label">Equipment Type</label><input type="text" placeholder="Scissor lift, boom lift, etc."></div>
@@ -447,7 +460,6 @@
       </div>
       <div class="form-row">
         <div class="form-group"><label class="field-label">Unit # / Asset ID</label><input type="text" placeholder="Unit number"></div>
-        <div class="form-group"><label class="field-label">Job Site / Location</label><input type="text" placeholder="Project or address"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="field-label">Hour Meter Reading</label><input type="text" placeholder="Current hours"></div>
@@ -535,18 +547,15 @@
   </div>
 
   <div class="section">
-    <div class="section-header"><span class="icon">✍️</span> Operator Certification</div>
+    <div class="section-header"><span class="icon">✍️</span> Operator Sign-Off</div>
     <div class="section-body">
       <div class="esign-disclaimer">
-        <strong>Electronic Signature Disclosure:</strong> By typing your full legal name below, you certify that you have personally inspected this aerial lift, the information above is accurate, and the equipment is / is not safe to operate as indicated. Your typed name constitutes your electronic signature.
+        By typing your name below, you confirm this inspection is accurate.
       </div>
       <div class="sig-field" style="margin-top:8px;">
-        <span class="field-label">Operator Signature (type full name)</span>
-        <input type="text" class="sig-input" placeholder="Type full name to sign">
-      </div>
-      <div class="sig-field" style="margin-top:12px;">
-        <span class="field-label">Supervisor Signature (if required)</span>
-        <input type="text" class="sig-input" placeholder="Type full name to sign">
+        <span class="field-label">Operator Signature</span>
+        <input type="text" class="sig-input" placeholder="Type full name">
+      </div>t" class="sig-input" placeholder="Type full name to sign">
       </div>
     </div>
   </div>
@@ -566,11 +575,45 @@
   document.getElementById('ptpTime').value = now.toTimeString().slice(0,5);
 })();
 
+function autoGrow(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+document.querySelectorAll('textarea').forEach(function(ta) { ta.addEventListener('input', function() { autoGrow(this); }); });
+
 document.getElementById('exportBtn').addEventListener('click', function() {
   var now = new Date();
   document.getElementById('timestampLine').textContent =
     'Generated: ' + now.toLocaleString() + ' | Aerial Lift Inspection — Titan Overhead Door';
-  setTimeout(function() { window.print(); }, 200);
+
+  var printSwaps = [];
+  document.querySelectorAll('textarea').forEach(function(ta) {
+    var div = document.createElement('div');
+    div.className = 'print-text-div';
+    div.textContent = ta.value;
+    var cs = window.getComputedStyle(ta);
+    div.style.fontFamily = cs.fontFamily;
+    div.style.fontSize = cs.fontSize;
+    div.style.lineHeight = cs.lineHeight;
+    div.style.padding = cs.padding;
+    div.style.width = '100%';
+    div.style.boxSizing = 'border-box';
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.wordWrap = 'break-word';
+    div.style.minHeight = ta.value ? '0' : '1.2em';
+    div.style.borderBottom = '1px solid #999';
+    ta.style.display = 'none';
+    ta.parentNode.insertBefore(div, ta.nextSibling);
+    printSwaps.push({ textarea: ta, div: div });
+  });
+
+  setTimeout(function() {
+    window.print();
+    setTimeout(function() {
+      printSwaps.forEach(function(swap) {
+        swap.textarea.style.display = '';
+        if (swap.div.parentNode) swap.div.parentNode.removeChild(swap.div);
+        autoGrow(swap.textarea);
+      });
+    }, 1000);
+  }, 200);
 });
 
 document.getElementById('resetBtn').addEventListener('click', function() {
