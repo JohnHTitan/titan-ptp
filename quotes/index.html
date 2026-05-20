@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titan Overhead Door â Quotes</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .gate {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    padding: 40px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+  }
+  .gate h1 {
+    color: #1a1a1a;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .gate p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .gate input[type="password"] {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 18px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    letter-spacing: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .gate input[type="password"]:focus {
+    border-color: #c8102e;
+  }
+  .gate input.error {
+    border-color: #e74c3c;
+    animation: shake 0.4s;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+  .gate button {
+    margin-top: 16px;
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: #c8102e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .gate button:hover { background: #a00d24; }
+  .error-msg {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-top: 10px;
+    display: none;
+  }
+
+  /* --- Links panel (hidden until authenticated) --- */
+  .links-panel {
+    display: none;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    padding: 40px;
+    max-width: 520px;
+    width: 90%;
+  }
+  .links-panel h1 {
+    color: #1a1a1a;
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .links-panel .subtitle {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+  .links-panel .card {
+    display: block;
+    text-decoration: none;
+    background: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: all 0.2s;
+  }
+  .links-panel .card:hover {
+    background: #fff;
+    border-color: #c8102e;
+    box-shadow: 0 2px 12px rgba(200,16,46,0.10);
+  }
+  .links-panel .card .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .links-panel .card .card-desc {
+    font-size: 13px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .links-panel .card .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge-desktop { background: #e8f4fd; color: #1a73e8; }
+  .badge-mobile  { background: #fef3e6; color: #e67e22; }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div class="gate" id="gateScreen">
+  <h1>Titan Overhead Door</h1>
+  <p>Enter access code to view quotes</p>
+  <input type="password" id="codeInput" maxlength="10" placeholder="----" autofocus>
+  <button id="submitBtn">Enter</button>
+  <div class="error-msg" id="errorMsg">Incorrect code. Please try again.</div>
+</div>
+
+<!-- LINKS PANEL (shown after correct code) -->
+<div class="links-panel" id="linksPanel">
+  <h1>Titan Quotes</h1>
+  <div class="subtitle">Select a form to open</div>
+
+  <a class="card" href="Titan_Quote.html">
+    <span class="card-title">Quote <span class="badge badge-desktop">Desktop</span></span>
+    <div class="card-desc">Standard quote form</div>
+  </a>
+
+  <a class="card" href="Titan_Quote_mobile.html">
+    <span class="card-title">Quote <span class="badge badge-mobile">Mobile</span></span>
+    <div class="card-desc">Mobile-optimized quote form</div>
+  </a>
+
+  <a class="card" href="Titan_Smart_Quote_V1_0.html">
+    <span class="card-title">Smart Quote v1.0 <span class="badge badge-desktop">Desktop</span></span>
+    <div class="card-desc">Advanced smart quote with auto-calculations</div>
+  </a>
+
+  <a class="card" href="Titan_Smart_Quote_V1_0_mobile.html">
+    <span class="card-title">Smart Quote v1.0 <span class="badge badge-mobile">Mobile</span></span>
+    <div class="card-desc">Mobile-optimized smart quote</div>
+  </a>
+</div>
+
+<script>
+  var CODE = '1992';
+  var inp = document.getElementById('codeInput');
+  var btn = document.getElementById('submitBtn');
+  var err = document.getElementById('errorMsg');
+
+  function tryCode() {
+    if (inp.value === CODE) {
+      document.getElementById('gateScreen').style.display = 'none';
+      document.getElementById('linksPanel').style.display = 'block';
+      sessionStorage.setItem('titan_q_auth', '1');
+    } else {
+      inp.classList.add('error');
+      err.style.display = 'block';
+      setTimeout(function() { inp.classList.remove('error'); }, 500);
+    }
+  }
+
+  btn.addEventListener('click', tryCode);
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryCode(); });
+
+  // Stay authenticated during this browser session
+  if (sessionStorage.getItem('titan_q_auth') === '1') {
+    document.getElementById('gateScreen').style.display = 'none';
+    document.getElementById('linksPanel').style.display = 'block';
+  }
+</script>
+</body>
+</html>
